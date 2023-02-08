@@ -3,11 +3,15 @@ package org.example.service.logic;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import org.example.entity.Article;
 import org.example.entity.ArticleVersion;
 import org.example.mapper.ArticleMapper;
 import org.example.mapper.ArticleVersionMapper;
+import org.example.utils.MD5Utils;
 import org.example.utils.Valid;
+import org.example.utils.WordCount;
 import org.example.vo.ArticleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +54,8 @@ public class ArticleLogicService {
         newVersion.setArticleId(article.getId());
         newVersion.setVersion(0);
         newVersion.setContent(content);
+        newVersion.setMd5(MD5Utils.getMd5(content));
+        newVersion.setLength(WordCount.getMSWordsCount(content));
         newVersion.setCreateTime(new Date());
         articleVersionMapper.insert(newVersion);
         return Boolean.TRUE;
@@ -72,9 +78,15 @@ public class ArticleLogicService {
 
         ArticleVersion newVersion = new ArticleVersion();
         newVersion.setArticleId(articleId);
-        newVersion.setVersion(version + 1);
         newVersion.setContent(content);
         newVersion.setCreateTime(new Date());
+        newVersion.setMd5(MD5Utils.getMd5(content));
+        newVersion.setLength(WordCount.getMSWordsCount(content));
+        if (newVersion.getMd5().equals(latestVersion.getMd5())) {
+            return Boolean.TRUE;//不更新
+        } else {
+            newVersion.setVersion(version + 1);
+        }
         articleVersionMapper.insert(newVersion);
         return Boolean.TRUE;
     }

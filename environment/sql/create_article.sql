@@ -15,6 +15,8 @@ CREATE TABLE `article_versions`
     `id`    int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
     `article_id` int(10) NOT NULL COMMENT '文章id',
     `content` text NOT NULL COMMENT '内容',
+    `length` int(10) NOT NULL COMMENT '字数',
+    `md5` varchar(32) NOT NULL COMMENT '内容的md5值',
     `create_time` datetime NOT NULL COMMENT '创建时间',
     `version` int(10) NOT NULL default '0' COMMENT '版本',
     PRIMARY KEY (`id`) USING BTREE,

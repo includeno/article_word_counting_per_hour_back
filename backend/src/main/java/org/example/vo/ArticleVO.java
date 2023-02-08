@@ -15,6 +15,7 @@ public class ArticleVO {
     private String content;
     private Date createTime;
     private Integer version;
+    private Integer length;
 
     public ArticleVO(Article article, ArticleVersion latestVersion) {
         this.id = article.getId();
@@ -22,5 +23,6 @@ public class ArticleVO {
         this.content = latestVersion.getContent();
         this.version = latestVersion.getVersion();
         this.createTime = latestVersion.getCreateTime();
+        this.length = latestVersion.getLength();
     }
 }
